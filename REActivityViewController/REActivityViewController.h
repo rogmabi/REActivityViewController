@@ -44,5 +44,6 @@
 - (id)initWithViewController:(UIViewController *)viewController activities:(NSArray *)activities;
 - (void)presentFromRootViewController;
 - (void)presentFromViewController:(UIViewController *)controller;
+- (void)presentFromRootViewController:(UIViewController *)controller withAnimationDuration:(NSTimeInterval)duration;
 
 @end

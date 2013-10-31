@@ -29,6 +29,7 @@
 @interface REActivityViewController ()
 
 @property (strong, readonly, nonatomic) UIView *backgroundView;
+@property (nonatomic, assign) NSTimeInterval animationDuration;
 
 - (NSInteger)height;
 
@@ -58,6 +59,7 @@
             _backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             _backgroundView.backgroundColor = [UIColor blackColor];
             _backgroundView.alpha = 0;
+            self.animationDuration = 0.3;
             [self.view addSubview:_backgroundView];
         } else {
             self.view.frame = CGRectMake(0, 0, 320, 417);
@@ -82,7 +84,7 @@
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         __typeof (&*self) __weak weakSelf = self;
-        [UIView animateWithDuration:0.4 animations:^{
+        [UIView animateWithDuration:self.animationDuration animations:^{
             _backgroundView.alpha = 0;
             CGRect frame = _activityView.frame;
             frame.origin.y = [UIScreen mainScreen].bounds.size.height;
@@ -98,7 +100,7 @@
         [self performBlock:^{
             if (completion)
                 completion();
-        } afterDelay:0.4];
+        } afterDelay:self.animationDuration];
     }
 }
 
@@ -110,20 +112,33 @@
 
 - (void)presentFromViewController:(UIViewController *)controller
 {
+    [self presentFromRootViewController:controller withAnimationDuration:self.animationDuration];
+}
+
+- (void)presentFromRootViewController:(UIViewController *)controller withAnimationDuration:(NSTimeInterval)duration {
+    
     self.rootViewController = controller;
     [controller addChildViewController:self];
     [controller.view addSubview:self.view];
-    [self didMoveToParentViewController:controller];
+    
+    if (!duration) {
+        duration = self.animationDuration;
+    }
+    else {
+        self.animationDuration = duration;
+    }
+    
+    [self didMoveToParentViewController:controller withAnimationDuration:self.animationDuration];
 }
 
-- (void)didMoveToParentViewController:(UIViewController *)parent
+- (void)didMoveToParentViewController:(UIViewController *)parent withAnimationDuration:(NSTimeInterval)duration
 {
     [super didMoveToParentViewController:parent];
     _backgroundView.frame = self.rootViewController.view.bounds;
     
     __typeof (&*self) __weak weakSelf = self;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        [UIView animateWithDuration:0.4 animations:^{
+        [UIView animateWithDuration:duration animations:^{
             weakSelf.backgroundView.alpha = 0.4;
             
             CGRect frame = weakSelf.activityView.frame;
