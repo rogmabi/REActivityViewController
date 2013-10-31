@@ -127,9 +127,6 @@
     label.textAlignment = UITextAlignmentCenter;
     label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor whiteColor];
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
-        label.textColor = [UIColor blackColor];
-    }
     label.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.75];
     label.shadowOffset = CGSizeMake(0, 1);
     label.text = activity.title;
@@ -140,6 +137,10 @@
     CGRect frame = label.frame;
     frame.origin.x = roundf((view.frame.size.width - frame.size.width) / 2.0f);
     label.frame = frame;
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
+        label.textColor = [UIColor lightGrayColor];
+        label.font = [UIFont systemFontOfSize:12.0];
+    }
     [view addSubview:label];
     
     return view;
