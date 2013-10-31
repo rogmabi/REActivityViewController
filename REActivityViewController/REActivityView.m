@@ -127,6 +127,9 @@
     label.textAlignment = UITextAlignmentCenter;
     label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor whiteColor];
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
+        label.textColor = [UIColor blackColor];
+    }
     label.shadowColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.75];
     label.shadowOffset = CGSizeMake(0, 1);
     label.text = activity.title;
